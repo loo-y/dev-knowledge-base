@@ -1,3 +1,5 @@
 # Table of contents
 
 * [How to use patch-package](README.md)
+* [Add GCC for node-canvas in Centos7.x](add-gcc-for-node-canvas-in-centos7.x.md)
+* [Create Server-Sent Events in Nextjs](create-server-sent-events-in-nextjs.md)
