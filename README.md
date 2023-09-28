@@ -1,11 +1,11 @@
 ---
 cover: >-
-  https://images.unsplash.com/photo-1498050108023-c5249f4df085?crop=entropy&cs=srgb&fm=jpg&ixid=M3wxOTcwMjR8MHwxfHNlYXJjaHwzfHxkZXYlMjB8ZW58MHx8fHwxNjk1OTExNTc2fDA&ixlib=rb-4.0.3&q=85
+  https://images.unsplash.com/photo-1579403124614-197f69d8187b?crop=entropy&cs=srgb&fm=jpg&ixid=M3wxOTcwMjR8MHwxfHNlYXJjaHw0fHxkZXZlbG9wfGVufDB8fHx8MTY5NTkxMTg2Nnww&ixlib=rb-4.0.3&q=85
 coverY: 0
 layout:
   cover:
     visible: true
-    size: full
+    size: hero
   title:
     visible: true
   description:
