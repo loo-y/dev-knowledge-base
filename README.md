@@ -50,3 +50,7 @@ Thank you for reading this site, and I sincerely hope it helps you on your devel
 
 
 
+#### Please use the search function in the top right corner to quickly find the content you need.
+
+请使用右上角的搜索功能快速找到您需要的内容。
+
