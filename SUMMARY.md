@@ -7,3 +7,4 @@
 * [TimeZone in Jest](timezone-in-jest.md)
 * [Common Git Commit Message Types](common-git-commit-message-types.md)
 * [Node v8 memory leak](node-v8-memory-leak.md)
+* [minIO + picGO self-hosted image hosting service](minio-+-picgo-self-hosted-image-hosting-service.md)
