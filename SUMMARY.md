@@ -12,3 +12,4 @@
 * [Ubuntu安装Netflix-Proxy](ubuntu-an-zhuang-netflixproxy.md)
 * [SNIProxy+Dnsmasq实现Netflix-Proxy](sniproxy+dnsmasq-shi-xian-netflixproxy.md)
 * [Simultaneously Pushing a Repository to Two Different Remotes: GitHub and GitLab](simultaneously-pushing-a-repository-to-two-different-remotes-github-and-gitlab.md)
+* [Typescript中的类型谓词](typescript-zhong-de-lei-xing-wei-ci.md)
