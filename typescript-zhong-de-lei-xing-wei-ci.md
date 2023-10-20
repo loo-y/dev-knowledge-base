@@ -87,5 +87,30 @@ function performSound(animal: Cat | Dog) {
 
 
 
+另外，上面那个 isSet 的判断方法，还可以使用泛型来改造成通用的类型判断方法
+
+```typescript
+function isType<T>(
+  value: unknown, 
+  targetType: new (...args: any[]) => T
+): value is T {
+  return value instanceof targetType;
+}
+```
+
+在这个示例中，我们将 `typeGuard` 参数替换为 `targetType`，它是一个构造函数（constructor）类型。通过 `new (...args: any[]) => T` 的形式，我们定义了一个接受任意参数的构造函数类型，该构造函数的实例类型为 `T`。
+
+然后，我们在 `isType` 函数中使用 `instanceof` 运算符来判断 `value` 是否是 `targetType` 的实例。
+
+使用这个改进后的方法，你可以按照下面的方式调用：
+
+```typescript
+const mySet = new Set<number>();
+console.log(isType(mySet, Set)); // true
+
+const myArray = [1, 2, 3];
+console.log(isType(myArray, Set)); // false
+```
+
 
 
