@@ -40,5 +40,5 @@ module.exports = async () => {
 
 最后我们可以在控制台打印看到，已经根据对应的时区显示了
 
-<figure><img src=".gitbook/assets/image.png" alt=""><figcaption></figcaption></figure>
+<figure><img src=".gitbook/assets/image (5).png" alt=""><figcaption></figcaption></figure>
 
