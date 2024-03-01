@@ -13,7 +13,7 @@ vi ~/.gitconfig
 添加如下内容：
 
 ```bash
-[includelf "gitdir:**/github/**"]
+[includeIf "gitdir:**/github/**"]
 path = ~/.githubconfig
 ```
 
