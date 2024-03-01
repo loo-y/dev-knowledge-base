@@ -14,3 +14,4 @@
 * [Simultaneously Pushing a Repository to Two Different Remotes: GitHub and GitLab](simultaneously-pushing-a-repository-to-two-different-remotes-github-and-gitlab.md)
 * [Typescript中的类型谓词](typescript-zhong-de-lei-xing-wei-ci.md)
 * [Mac Sonoma 无法安装 Charles 的解决办法](mac-sonoma-wu-fa-an-zhuang-charles-de-jie-jue-ban-fa.md)
+* [GitHub 多账户管理：在不同文件夹下使用不同账户](github-duo-zhang-hu-guan-li-zai-bu-tong-wen-jian-jia-xia-shi-yong-bu-tong-zhang-hu.md)
