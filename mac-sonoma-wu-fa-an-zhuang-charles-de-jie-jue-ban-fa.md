@@ -4,7 +4,7 @@
 
 <div align="left">
 
-<figure><img src=".gitbook/assets/image.png" alt="" width="375"><figcaption></figcaption></figure>
+<figure><img src=".gitbook/assets/image (3).png" alt="" width="375"><figcaption></figcaption></figure>
 
 </div>
 
@@ -12,7 +12,7 @@
 
 先说结论，根本原有是 Charles 是通过 DiskImageMounter 来启动的，但 DiskImageMounter 没有系统磁盘权限，鬼知道我之前的 dmg 文件是怎么安装上的 😓
 
-<figure><img src=".gitbook/assets/image (1).png" alt=""><figcaption></figcaption></figure>
+<figure><img src=".gitbook/assets/image (1) (1).png" alt=""><figcaption></figcaption></figure>
 
 所以要解决这个问题，就是给 DiskImageMounter.app 完全磁盘访问权限。
 
@@ -25,7 +25,7 @@ open .
 
 打开对应的文件夹，再将 CoreServices 文件夹放置在访达左侧的快捷访问中
 
-<figure><img src=".gitbook/assets/image (3).png" alt=""><figcaption></figcaption></figure>
+<figure><img src=".gitbook/assets/image (3) (1).png" alt=""><figcaption></figcaption></figure>
 
 打开系统设置 -> 隐私与安全性 -> 完全磁盘访问权限，点击新增将 DiskImageMounter 添加到列表里
 
