@@ -117,7 +117,87 @@ Popup 和 Option 本身并不是必须的。这取决于插件本身是否需要
 
 ## 开发实践
 
-接下来我们以开发一个 修改 url 请求功能的插件为例。
+接下来我们以开发一个 “劫持并修改 fetch 请求功能” 的插件为例。\
+插件实现的功能为，读取页面上的fetch请求，如果请求URL的 query 中有 subEnv，则可以允许用户调整 subEnv 的值。
+
+劫持 fetch 在插件开发中可以有两种形式，
+
+1.  通过 插件 API declarativeNetRequest 来劫持。
+
+    优点：Chrome内核的 API 保证了可以劫持到所有请求\
+    缺点：缺少灵活性且限制较多
+2.  直接注入 js 来hook 页面上原有的 fetch 方法；
+
+    优点：更灵活地处理方式，可以随意变更 request 和 response\
+    缺点：注入的时机可能导致并不能覆盖所有请求
+
+
+
+假设我们先以第一种方式来实现。首先需要修改 manifest 中的 permisssions
+
+```json
+"permissions": [ "declarativeNetRequest", "scripting", "storage"],
+"declarative_net_request" : {
+    "rule_resources" : []
+},
+"background": {
+    "service_worker": "service-worker.js"
+}
+```
+
+declarativeNetRequest 用于获取页面上的请求，并且需要声明对应的 rule 规则。([read more](https://developer.chrome.com/docs/extensions/reference/api/declarativeNetRequest))
+
+在 manifest 中，我们可以指定 rule\_resources 为空，之后在插件让用户手动的选择需要被修改的 fetch URL，这样可以更灵活劫持需要处理的路径。
+
+同时也需要 storage 权限来保存用户选择的 URL。
+
+在 service-worker.js 中，可以通过监听 storage 变化来更新 rules
+
+```javascript
+// 监听 storage 变化
+chrome.storage.onChanged.addListener((changes, namespace) => {
+    const { subEvnItemList} = changes || {}
+    const { newValue } = subEvnItemList || {}
+    updateRulesForSubEvnItemList(newValue)
+})
+
+// 更新 rules
+function updateRulesForSubEvnItemList(subEvnItemList){
+    let newRules = []
+    if(subEvnItemList?.length === 0) return
+    // 对用户的选择进行处理以符合规则 Syntax
+    subEvnItemList.map((item, index) => {
+        const { enabled, subEvn, urlMatch } = item
+        if(enabled && urlMatch){
+            newRules.push({
+                id: (+index + 1),
+                priority: 1,
+                action: {
+                    type: 'redirect',
+                    redirect: {
+                        regexSubstitution: `\\1subEnv=${subEvn}&\\4`
+                    }
+                },
+                condition: {
+                    regexFilter: `(ctrip.com\/[^\t\n\f\r].*${urlMatch}[^\t\n\f\r].*)(subEnv=[^&]+($|&))(.*$)`
+                }
+            })
+        } 
+    })
+    chrome.declarativeNetRequest.getDynamicRules(previousRules => {
+        const previousRuleIds = previousRules.map(rule => rule.id);
+        chrome.declarativeNetRequest.updateDynamicRules({
+          removeRuleIds: previousRuleIds,
+          addRules: newRules
+        });
+    });
+}
+```
+
+declarativeNetRequest API 接受的规则可以通过正则表达式来命中需要的 URL。([read more](https://developer.chrome.com/docs/extensions/reference/api/declarativeNetRequest#type-RuleCondition))\
+但由于限制，所支持的正则表达式并非完全态，贪婪方法并不适用。([RE2 Syntax](https://github.com/google/re2/wiki/Syntax))
+
+declarativeNetRequest API 通过 updateDynamicRules 方法来动态修改 rules。([read more](https://developer.chrome.com/docs/extensions/reference/api/declarativeNetRequest#method-updateDynamicRules))
 
 
 
