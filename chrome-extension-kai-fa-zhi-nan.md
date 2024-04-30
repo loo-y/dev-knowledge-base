@@ -1,10 +1,8 @@
----
-description: '[WIP]'
----
-
-# Chrome Extension 开发入门指南
+# Chrome Extension 开发指南
 
 本教程中将引导了解并开发基于最新 Manifest V3（MV3）标准的Chrome插件。我们会一步步探索 Chrome 插件开发的核心部分，以及如何配合代码示例，理解每一块的具体运作方式。
+
+在本教程中，我们将深入了解并掌握基于最新Manifest V3（MV3）标准的Chrome插件开发。通过逐步探索和丰富的代码示例，您将全面理解插件开发的每个环节。
 
 ## **基本概念** <a href="#id-ru-he-chuang-jian-yi-ge-chrome-cha-jian-ji-ben-gai-nian" id="id-ru-he-chuang-jian-yi-ge-chrome-cha-jian-ji-ben-gai-nian"></a>
 
@@ -103,7 +101,11 @@ chrome.runtime.onMessage.addListener(
 
 ### Popup Page 和 Option Page
 
-当用户点击插件图标时，展开的页面即是 Popup Page。而 Option Page 则对应插件的选项页面，一般用于插件的一些设置。同时也可以调用 chrome.storage 来进行存储和读取。
+当用户与Chrome插件进行交互时，Popup Page是他们点击插件图标后首先看到的页面。Popup Page应该简洁直观，同时提供用户所需的核心功能或信息。
+
+Option Page是插件的设置中心，允许用户根据个人偏好调整插件的行为。在这里，用户可以修改插件的配置，如通知设置、外观偏好或功能开关。
+
+为了增强用户体验，插件可以在Popup 和 Option 中利用`chrome.storage` API来存储和读取用户的个性化设置。无需使用复杂的服务器端存储解决方案。
 
 <div align="left">
 
@@ -111,29 +113,42 @@ chrome.runtime.onMessage.addListener(
 
 </div>
 
-Popup 和 Option 本身并不是必须的。这取决于插件本身是否需要。
+注意，Popup 和 Option 本身并不是必须的。这取决于插件本身是否需要。
 
 
 
 ## 开发实践
 
-接下来我们以开发一个 “劫持并修改 fetch 请求功能” 的插件为例。\
-插件实现的功能为，读取页面上的fetch请求，如果请求URL的 query 中有 subEnv，则可以允许用户调整 subEnv 的值。
+在本节中，我们将通过一个具体的开发案例来深入Chrome插件的开发实践。目标是创建一个插件，该插件能够读取页面上发起的fetch请求，并允许用户修改请求URL中的`subEnv`查询参数。
+
+**功能实现**
+
+插件的核心功能将围绕以下两个关键点展开：
+
+1. **读取fetch请求**：监测页面上的fetch请求，寻找包含`subEnv`参数的URL。
+2. **用户交互**：提供用户界面，使用户能够修改`subEnv`的值。
+
+**技术对比**
+
+在实现上述功能时，我们有两种主要的技术途径：
 
 劫持 fetch 在插件开发中可以有两种形式，
 
-1.  通过 插件 API declarativeNetRequest 来劫持。
+1. **使用`declarativeNetRequest` API**\
+   **优势**：作为Chrome内核提供的API，`declarativeNetRequest`能够确保拦截所有fetch请求。\
+   **局限**：相比于直接注入JS，这种方法在灵活性上有所欠缺，并且存在一定的使用限制。
+2.  **注入JS以Hook fetch方法**\
+    **优势**：提供了更高的灵活性，允许开发者自由地修改请求（Request）和响应（Response）。
 
-    优点：Chrome内核的 API 保证了可以劫持到所有请求\
-    缺点：缺少灵活性且限制较多
-2.  直接注入 js 来hook 页面上原有的 fetch 方法；
+    **局限**：注入脚本的时机可能会影响其对所有fetch请求的覆盖能力。
 
-    优点：更灵活地处理方式，可以随意变更 request 和 response\
-    缺点：注入的时机可能导致并不能覆盖所有请求
+**权衡与选择**&#x20;
 
+开发者在选择实现方式时，需要根据项目的具体需求进行权衡。如果需要确保捕获所有请求，且对修改的灵活性要求不高，那么使用`declarativeNetRequest`可能是更好的选择。反之，如果项目需要高度定制化的请求处理逻辑，那么注入JS可能是更合适的方案。
 
+#### manifest.json
 
-假设我们先以第一种方式来实现。首先需要修改 manifest 中的 permisssions
+假设我们以第一种方式来实现。首先需要修改 manifest 中的 permisssions
 
 ```json
 "permissions": [ "declarativeNetRequest", "scripting", "storage"],
@@ -150,6 +165,10 @@ declarativeNetRequest 用于获取页面上的请求，并且需要声明对应�
 在 manifest 中，我们可以指定 rule\_resources 为空，之后在插件让用户手动的选择需要被修改的 fetch URL，这样可以更灵活劫持需要处理的路径。
 
 同时也需要 storage 权限来保存用户选择的 URL。
+
+
+
+#### service-worker.js
 
 在 service-worker.js 中，可以通过监听 storage 变化来更新 rules
 
@@ -198,6 +217,79 @@ declarativeNetRequest API 接受的规则可以通过正则表达式来命中需
 但由于限制，所支持的正则表达式并非完全态，贪婪方法并不适用。([RE2 Syntax](https://github.com/google/re2/wiki/Syntax))
 
 declarativeNetRequest API 通过 updateDynamicRules 方法来动态修改 rules。([read more](https://developer.chrome.com/docs/extensions/reference/api/declarativeNetRequest#method-updateDynamicRules))
+
+
+
+#### Popup Page
+
+为了提供一个便捷的用户交互方式，我们将创建一个Popup Page，允许用户输入特定的URL和调整所需的`subEnv`参数。此外，我们将利用Chrome的存储机制来保存用户的输入，以便在用户下次访问Popup Page时能够恢复之前的设置。
+
+<div align="left">
+
+<figure><img src=".gitbook/assets/image (6).png" alt="" width="563"><figcaption></figcaption></figure>
+
+</div>
+
+**存储机制**
+
+1. **数据保存**：当用户输入URL和`subEnv`参数后，我们将使用`chrome.storage` API来保存这些数据。这确保了用户设置的持久化，即使在浏览器关闭后也能保持。
+2. **数据提取**：在Popup Page加载时，我们将从`chrome.storage`中提取之前保存的URL和`subEnv`值，并将其自动填充到相应的输入框中，提升用户体验。
+
+**关键代码实现**
+
+以下是实现上述存储和提取功能的JavaScript代码示例：
+
+```typescript
+const saveSubEvnItemList = async (subEvnItemList: ISubEvnItem[]) => {
+    let msg = ''
+    // @ts-ignore
+    if (typeof chrome === 'undefined' || !chrome?.tabs) {
+        msg = 'Please use as chrome extension'
+        return
+    }
+    return new Promise((resolve, reject) => {
+        // @ts-ignore
+        chrome.storage.sync.set({ subEvnItemList }).then(() => {
+            resolve(true)
+        })
+    })
+}
+
+const restoreSubEvnItemList = async (): Promise<ISubEvnItem[]> => {
+    let msg = ''
+    // @ts-ignore
+    if (typeof chrome === 'undefined' || !chrome?.tabs) {
+        msg = 'Please use as chrome extension'
+        return []
+    }
+    return new Promise<ISubEvnItem[]>((resolve, reject) => {
+        // @ts-ignore
+        chrome.storage.sync.get(null, (items: any) => {
+            const subEvnItemList = items?.subEvnItemList || []
+            resolve(subEvnItemList)
+        })
+    }).catch(e => {
+        console.error(e)
+        return []
+    })
+}
+```
+
+这里设计了2个方法用于保存和读取 chrome.storage。同时每当点击确认按钮 saveSubEvnItemList 之后，就会触发 service-worker.js 中的 _chrome.storage.onChanged_
+
+至此，一个用于修改页面请求中，subEvn query 的Chrome插件现已开发完成。
+
+
+
+### **推荐开发工具：NextExtension-Starter**&#x20;
+
+为了简化开发流程并提高开发效率，这里推荐使用 [NextExtension-Starter](https://github.com/loo-y/nextextension-starter)。一个基于Next.js框架的Chrome插件开发模板。
+
+**使用NextExtension-Starter的好处** ：
+
+* **快速开发**：利用React的组件化特性，构建可复用的UI组件，实现的Popup和Option页面。
+* **集成打包**：该模板集成了打包工具，可以一步生成插件所需的Zip文件，简化部署流程。
+* **自定义图标**：轻松生成和集成插件icon，增强插件的视觉效果和用户识别度。
 
 
 

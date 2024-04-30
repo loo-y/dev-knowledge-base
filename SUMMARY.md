@@ -16,4 +16,4 @@
 * [Mac Sonoma 无法安装 Charles 的解决办法](mac-sonoma-wu-fa-an-zhuang-charles-de-jie-jue-ban-fa.md)
 * [Git 多账号管理：在不同文件夹区分Git账号](git-duo-zhang-hao-guan-li-zai-bu-tong-wen-jian-jia-qu-fen-git-zhang-hao.md)
 * [localStorage VS IndexedDB](localstorage-vs-indexeddb.md)
-* [Chrome Extension 开发入门指南](chrome-extension-kai-fa-ru-men-zhi-nan.md)
+* [Chrome Extension 开发指南](chrome-extension-kai-fa-zhi-nan.md)
