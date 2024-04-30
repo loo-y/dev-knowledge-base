@@ -12,7 +12,7 @@
 
 先说结论，根本原有是 Charles 是通过 DiskImageMounter 来启动的，但 DiskImageMounter 没有系统磁盘权限，鬼知道我之前的 dmg 文件是怎么安装上的 😓
 
-<figure><img src=".gitbook/assets/image (1) (1).png" alt=""><figcaption></figcaption></figure>
+<figure><img src=".gitbook/assets/image (1) (1) (1).png" alt=""><figcaption></figcaption></figure>
 
 所以要解决这个问题，就是给 DiskImageMounter.app 完全磁盘访问权限。
 
