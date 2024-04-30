@@ -1,8 +1,6 @@
 # Chrome Extension 开发指南
 
-本教程中将引导了解并开发基于最新 Manifest V3（MV3）标准的Chrome插件。我们会一步步探索 Chrome 插件开发的核心部分，以及如何配合代码示例，理解每一块的具体运作方式。
-
-在本教程中，我们将深入了解并掌握基于最新Manifest V3（MV3）标准的Chrome插件开发。通过逐步探索和丰富的代码示例，您将全面理解插件开发的每个环节。
+在本教程中，我们将深入了解并掌握基于最新Manifest V3（MV3）标准的Chrome插件开发。通过逐步探索和丰富的代码示例，全面理解插件开发的每个环节。
 
 ## **基本概念** <a href="#id-ru-he-chuang-jian-yi-ge-chrome-cha-jian-ji-ben-gai-nian" id="id-ru-he-chuang-jian-yi-ge-chrome-cha-jian-ji-ben-gai-nian"></a>
 
